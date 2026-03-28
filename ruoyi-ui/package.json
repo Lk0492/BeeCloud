@@ -1,7 +1,7 @@
 {
   "name": "ruoyi",
   "version": "3.9.2",
-  "description": "若依管理系统",
+  "description": "蜂云预审平台",
   "author": "若依",
   "license": "MIT",
   "scripts": {
