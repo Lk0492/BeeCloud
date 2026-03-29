@@ -24,6 +24,7 @@ import "quill/dist/quill.core.css"
 import "quill/dist/quill.snow.css"
 import "quill/dist/quill.bubble.css"
 import { getToken } from "@/utils/auth"
+import { isHttp } from "@/utils/validate"
 
 export default {
   name: "Editor",
@@ -183,8 +184,9 @@ export default {
         let quill = this.Quill
         // 获取光标所在位置
         let length = quill.getSelection().index
-        // 插入图片  res.url为服务器返回的图片地址
-        quill.insertEmbed(length, "image", process.env.VUE_APP_BASE_API + res.fileName)
+        // 插入图片（MinIO 等为完整 URL，本地为 /profile/... 需拼网关前缀）
+        const src = isHttp(res.fileName) ? res.fileName : (process.env.VUE_APP_BASE_API + res.fileName)
+        quill.insertEmbed(length, "image", src)
         // 调整光标到最后
         quill.setSelection(length + 1)
       } else {

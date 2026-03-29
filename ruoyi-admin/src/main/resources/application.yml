@@ -13,6 +13,16 @@ ruoyi:
   # 验证码类型 math 数字计算 char 字符验证
   captchaType: math
 
+# MinIO 对象存储（启用后 /common/upload、头像等写入桶；关闭则仍用本地 ruoyi.profile）
+# 控制台默认 9001，API 默认 9000；请在 MinIO 控制台创建与 bucketName 同名的桶或依赖启动时自动创建，并设置桶策略为可匿名下载（或走反向代理鉴权）
+minio:
+  enabled: true
+  endpoint: http://192.168.88.128:9000
+  url: http://192.168.88.128:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: ruoyi
+
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

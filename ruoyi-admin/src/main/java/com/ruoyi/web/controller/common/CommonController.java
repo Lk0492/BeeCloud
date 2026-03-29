@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.framework.config.ServerConfig;
+import com.ruoyi.framework.web.service.MinioService;
 
 /**
  * 通用请求处理
@@ -33,6 +36,9 @@ public class CommonController
 
     @Autowired
     private ServerConfig serverConfig;
+
+    @Autowired
+    private ObjectProvider<MinioService> minioServiceProvider;
 
     private static final String FILE_DELIMITER = ",";
 
@@ -76,11 +82,20 @@ public class CommonController
     {
         try
         {
-            // 上传文件路径
-            String filePath = RuoYiConfig.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            MinioService minioService = minioServiceProvider.getIfAvailable();
+            String fileName;
+            String url;
+            if (minioService != null)
+            {
+                fileName = minioService.upload(file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, "upload");
+                url = fileName;
+            }
+            else
+            {
+                String filePath = RuoYiConfig.getUploadPath();
+                fileName = FileUploadUtils.upload(filePath, file);
+                url = serverConfig.getUrl() + fileName;
+            }
             AjaxResult ajax = AjaxResult.success();
             ajax.put("url", url);
             ajax.put("fileName", fileName);
@@ -102,7 +117,7 @@ public class CommonController
     {
         try
         {
-            // 上传文件路径
+            MinioService minioService = minioServiceProvider.getIfAvailable();
             String filePath = RuoYiConfig.getUploadPath();
             List<String> urls = new ArrayList<String>();
             List<String> fileNames = new ArrayList<String>();
@@ -110,9 +125,18 @@ public class CommonController
             List<String> originalFilenames = new ArrayList<String>();
             for (MultipartFile file : files)
             {
-                // 上传并返回新文件名称
-                String fileName = FileUploadUtils.upload(filePath, file);
-                String url = serverConfig.getUrl() + fileName;
+                String fileName;
+                String url;
+                if (minioService != null)
+                {
+                    fileName = minioService.upload(file, MimeTypeUtils.DEFAULT_ALLOWED_EXTENSION, "upload");
+                    url = fileName;
+                }
+                else
+                {
+                    fileName = FileUploadUtils.upload(filePath, file);
+                    url = serverConfig.getUrl() + fileName;
+                }
                 urls.add(url);
                 fileNames.add(fileName);
                 newFileNames.add(FileUtils.getName(fileName));
