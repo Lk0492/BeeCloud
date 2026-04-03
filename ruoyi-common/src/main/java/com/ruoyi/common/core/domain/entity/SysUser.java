@@ -64,6 +64,26 @@ public class SysUser extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 用户类型（00系统用户 01学生 02审核员） */
+    @Excel(name = "用户类型", readConverterExp = "00=系统用户,01=学生,02=审核员")
+    private String userType;
+
+    /** 学号（学生使用） */
+    @Excel(name = "学号", type = Type.EXPORT)
+    private String studentNo;
+
+    /** 工号（审核员使用） */
+    @Excel(name = "工号", type = Type.EXPORT)
+    private String staffNo;
+
+    /** 身份证号 */
+    @Excel(name = "身份证号", type = Type.EXPORT)
+    private String idCard;
+
+    /** 入学年份 */
+    @Excel(name = "入学年份", type = Type.EXPORT)
+    private String admissionYear;
+
     /** 最后登录IP */
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;
@@ -226,6 +246,56 @@ public class SysUser extends BaseEntity
     public void setDelFlag(String delFlag)
     {
         this.delFlag = delFlag;
+    }
+
+    public String getUserType()
+    {
+        return userType;
+    }
+
+    public void setUserType(String userType)
+    {
+        this.userType = userType;
+    }
+
+    public String getStudentNo()
+    {
+        return studentNo;
+    }
+
+    public void setStudentNo(String studentNo)
+    {
+        this.studentNo = studentNo;
+    }
+
+    public String getStaffNo()
+    {
+        return staffNo;
+    }
+
+    public void setStaffNo(String staffNo)
+    {
+        this.staffNo = staffNo;
+    }
+
+    public String getIdCard()
+    {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard)
+    {
+        this.idCard = idCard;
+    }
+
+    public String getAdmissionYear()
+    {
+        return admissionYear;
+    }
+
+    public void setAdmissionYear(String admissionYear)
+    {
+        this.admissionYear = admissionYear;
     }
 
     public String getLoginIp()
