@@ -84,6 +84,10 @@ public class SysUser extends BaseEntity
     @Excel(name = "入学年份")
     private String admissionYear;
 
+    /** 备注 */
+    @Excel(name = "备注")
+    private String remark;
+
     /** 最后登录IP */
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;
@@ -296,6 +300,18 @@ public class SysUser extends BaseEntity
     public void setAdmissionYear(String admissionYear)
     {
         this.admissionYear = admissionYear;
+    }
+
+    @Override
+    public String getRemark()
+    {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark)
+    {
+        this.remark = remark;
     }
 
     public String getLoginIp()
