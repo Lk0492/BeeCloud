@@ -28,7 +28,7 @@ public class SysUser extends BaseEntity
     private Long userId;
 
     /** 部门ID */
-    @Excel(name = "部门编号", type = Type.IMPORT)
+    @Excel(name = "部门编号")
     private Long deptId;
 
     /** 用户账号 */
@@ -69,19 +69,19 @@ public class SysUser extends BaseEntity
     private String userType;
 
     /** 学号（学生使用） */
-    @Excel(name = "学号", type = Type.EXPORT)
+    @Excel(name = "学号")
     private String studentNo;
 
     /** 工号（审核员使用） */
-    @Excel(name = "工号", type = Type.EXPORT)
+    @Excel(name = "工号")
     private String staffNo;
 
     /** 身份证号 */
-    @Excel(name = "身份证号", type = Type.EXPORT)
+    @Excel(name = "身份证号")
     private String idCard;
 
     /** 入学年份 */
-    @Excel(name = "入学年份", type = Type.EXPORT)
+    @Excel(name = "入学年份")
     private String admissionYear;
 
     /** 最后登录IP */

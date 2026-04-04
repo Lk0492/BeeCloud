@@ -199,15 +199,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="角色" prop="roleIds">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
-                <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.value">{{ dict.label }}</el-radio>
@@ -294,8 +285,6 @@ export default {
       dateRange: [],
       // 岗位选项
       postOptions: [],
-      // 角色选项
-      roleOptions: [],
       // 表单参数
       form: {},
       defaultProps: {
@@ -370,9 +359,6 @@ export default {
             message: "请输入正确的手机号码",
             trigger: "blur"
           }
-        ],
-        roleIds: [
-          { required: true, message: "请至少选择一个角色", trigger: "change" }
         ]
       }
     }
@@ -472,8 +458,7 @@ export default {
         idCard: undefined,
         admissionYear: undefined,
         remark: undefined,
-        postIds: [],
-        roleIds: []
+        postIds: []
       }
       this.resetForm("form")
     },
@@ -515,7 +500,6 @@ export default {
       this.reset()
       getUser().then(response => {
         this.postOptions = response.posts
-        this.roleOptions = response.roles
         this.open = true
         this.title = "添加用户"
         this.form.password = this.initPassword
@@ -528,9 +512,7 @@ export default {
       getUser(userId).then(response => {
         this.form = response.data
         this.postOptions = response.posts
-        this.roleOptions = response.roles
         this.$set(this.form, 'postIds', response.postIds || [])
-        this.$set(this.form, 'roleIds', response.roleIds || [])
         // 确保学号和工号字段存在
         if (this.form.studentNo === undefined) {
           this.$set(this.form, 'studentNo', '')
