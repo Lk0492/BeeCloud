@@ -347,19 +347,32 @@ insert into sys_role_menu values (2, 3152);
 
 -- ----------------------------
 -- 补充-将所有学生用户分配到学生角色 (role_id=2)
--- 说明：将 user_type='student' 的用户自动分配到学生角色
+-- 说明：将 user_type='01' 的用户自动分配到学生角色（注意：sys_user.user_type 的值是 '01'，不是 'student'）
 -- 说明2：bc_review.sql 运行在全新库时会插入 student 用户并分配角色，
 --        运行在已有库时会自动跳过已有角色的用户，不会重复插入
--- 注意：如果你的学生用户不是通过 user_type='student' 标识的，
---        请根据实际情况修改 WHERE 条件或手动在后台分配角色
 -- ----------------------------
 INSERT INTO sys_user_role (user_id, role_id)
 SELECT u.user_id, 2
 FROM sys_user u
-WHERE u.user_type = 'student'
+WHERE u.user_type = '01'
   AND u.del_flag = '0'
   AND NOT EXISTS (
       SELECT 1 FROM sys_user_role ur WHERE ur.user_id = u.user_id AND ur.role_id = 2
+  )
+ON DUPLICATE KEY UPDATE role_id = role_id;
+
+-- ----------------------------
+-- 补充-将所有审核员用户分配到审核员角色 (role_id=3)
+-- 说明：将 user_type='02' 的用户自动分配到审核员角色
+-- 注意：sys_user.user_type 的值是 '02'，不是 'reviewer'
+-- ----------------------------
+INSERT INTO sys_user_role (user_id, role_id)
+SELECT u.user_id, 3
+FROM sys_user u
+WHERE u.user_type = '02'
+  AND u.del_flag = '0'
+  AND NOT EXISTS (
+      SELECT 1 FROM sys_user_role ur WHERE ur.user_id = u.user_id AND ur.role_id = 3
   )
 ON DUPLICATE KEY UPDATE role_id = role_id;
 

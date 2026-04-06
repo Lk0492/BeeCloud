@@ -90,7 +90,7 @@ public class CommonController
      * 通用上传请求（单个）
      */
     @PostMapping("/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public AjaxResult uploadFile(MultipartFile file, String fileCategory, Long formId) throws Exception
     {
         try
         {
@@ -121,6 +121,8 @@ public class CommonController
             ajax.put("fileName", fileName);
             ajax.put("newFileName", FileUtils.getName(fileName));
             ajax.put("originalFilename", file.getOriginalFilename());
+            ajax.put("fileCategory", fileCategory);
+            ajax.put("formId", formId);
             // 上传成功后写入附件记录
             SysAttachment attachment = buildAttachment(file, url, fileName, storageType, bucketName, objectName);
             attachmentService.insertAttachment(attachment);

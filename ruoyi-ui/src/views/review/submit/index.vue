@@ -117,14 +117,14 @@
             ref="uploadRef"
             :action="uploadUrl"
             :headers="uploadHeaders"
-            :data="{ fileCategory: doc.typeCode, formId: currentForm ? currentForm.formId : 0 }"
+            :data="getUploadData(doc)"
             :before-upload="(file) => beforeUpload(file, doc)"
             :on-success="handleUploadSuccess"
             :on-error="handleUploadError"
+            :on-progress="handleUploadProgress"
             :on-remove="handleUploadRemove"
             :file-list="[]"
             :accept="getAccept(doc)"
-            :disabled="uploading"
             multiple
             drag
           >
@@ -276,6 +276,12 @@ export default {
       const suffix = doc.allowedSuffix || 'pdf,jpg,jpeg,png'
       return '.' + suffix.replace(/,/g, ',.')
     },
+    getUploadData(doc) {
+      return {
+        fileCategory: doc.typeCode,
+        formId: this.currentForm ? this.currentForm.formId : 0
+      }
+    },
     beforeUpload(file, doc) {
       // 将当前资料类型信息暂存到 file 对象上，供 success 回调使用
       file._docType = doc
@@ -286,7 +292,7 @@ export default {
         return false
       }
       if (file.size > doc.maxFileSize) {
-        this.$modal.msgError(`文件 ${file.name} 超过大小限制（${this.formatFileSize(doc.maxFileSize)}}）`)
+        this.$modal.msgError(`文件 ${file.name} 超过大小限制（${this.formatFileSize(doc.maxFileSize)}）`)
         return false
       }
       this.uploading = true
@@ -295,19 +301,19 @@ export default {
     handleUploadSuccess(res, file) {
       this.uploading = false
       if (res.code === 200) {
-        // 从 file._docType 取出上传时的资料类型
         const doc = file._docType
         const fileName = res.originalFilename || res.fileName || file.name
         const fileSize = file.size || res.size
         const filePath = res.url || res.fileName || ''
         const fileSuffix = fileName.split('.').pop() || ''
-        // 调用审核模块接口保存附件元数据
         const attachment = {
           fileCategory: doc ? doc.typeCode : (res.fileCategory || ''),
           fileName: fileName,
           filePath: filePath,
           fileSize: fileSize,
-          fileSuffix: fileSuffix
+          fileSuffix: fileSuffix,
+          formId: this.currentForm ? this.currentForm.formId : null,
+          fileId: res.fileId || null
         }
         addAttachment(attachment).then(() => {
           this.loadAttachments()
@@ -320,12 +326,22 @@ export default {
           this.loadData()
         })
       } else {
-        this.$modal.msgError(res.msg || "上传失败")
+        this.$modal.msgError(res.msg || "上传失败，请重试")
+      }
+    },
+    handleUploadProgress(event, file) {
+      if (event.percent < 100) {
+        this.uploading = true
       }
     },
     handleUploadError(err, file, fileList) {
       this.uploading = false
-      this.$modal.msgError("上传失败：" + err.message)
+      let errMsg = "上传失败"
+      if (err && err.message) {
+        errMsg += "：" + err.message
+      }
+      this.$modal.msgError(errMsg)
+      console.error("文件上传失败", err)
     },
     handleUploadRemove(file, fileList) {
       // 不做处理，附件通过删除按钮删除

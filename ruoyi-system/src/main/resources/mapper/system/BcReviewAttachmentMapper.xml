@@ -66,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into bc_review_attachment(
             <if test="formId != null">form_id,</if>
             <if test="fileId != null">file_id,</if>
-            <if test="fileCategory != null and fileCategory != ''">file_category,</if>
+            <if test="fileCategory != null">file_category,</if>
             <if test="fileName != null and fileName != ''">file_name,</if>
             <if test="filePath != null and filePath != ''">file_path,</if>
             <if test="fileSize != null">file_size,</if>
@@ -79,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )values(
             <if test="formId != null">#{formId},</if>
             <if test="fileId != null">#{fileId},</if>
-            <if test="fileCategory != null and fileCategory != ''">#{fileCategory},</if>
+            <if test="fileCategory != null">#{fileCategory},</if>
             <if test="fileName != null and fileName != ''">#{fileName},</if>
             <if test="filePath != null and filePath != ''">#{filePath},</if>
             <if test="fileSize != null">#{fileSize},</if>
