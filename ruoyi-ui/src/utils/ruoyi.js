@@ -226,3 +226,12 @@ export function getNormalPath(p) {
 export function blobValidate(data) {
   return data.type !== 'application/json'
 }
+
+// 文件大小格式化
+export function formatFileSize(size) {
+  if (!size) return '-'
+  if (size < 1024) return size + ' B'
+  if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB'
+  if (size < 1024 * 1024 * 1024) return (size / 1024 / 1024).toFixed(1) + ' MB'
+  return (size / 1024 / 1024 / 1024).toFixed(1) + ' GB'
+}

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BcReviewFormMapper">
+
+    <resultMap type="BcReviewForm" id="BcReviewFormResult">
+        <id     property="formId"           column="form_id" />
+        <result property="formNo"           column="form_no" />
+        <result property="studentId"        column="student_id" />
+        <result property="studentName"      column="student_name" />
+        <result property="studentNo"        column="student_no" />
+        <result property="idCard"           column="id_card" />
+        <result property="deptId"           column="dept_id" />
+        <result property="deptName"         column="dept_name" />
+        <result property="admissionYear"    column="admission_year" />
+        <result property="formStatus"       column="form_status" />
+        <result property="submitTime"       column="submit_time" />
+        <result property="reviewerId"       column="reviewer_id" />
+        <result property="reviewerName"     column="reviewer_name" />
+        <result property="reviewTime"       column="review_time" />
+        <result property="versionNum"       column="version_num" />
+        <result property="isCurrent"         column="is_current" />
+        <result property="rejectReason"    column="reject_reason" />
+        <result property="totalAttachments" column="total_attachments" />
+        <result property="reviewedAttachments" column="reviewed_attachments" />
+        <result property="delFlag"          column="del_flag" />
+        <result property="createBy"         column="create_by" />
+        <result property="createTime"       column="create_time" />
+        <result property="updateBy"         column="update_by" />
+        <result property="updateTime"       column="update_time" />
+        <result property="remark"           column="remark" />
+        <collection property="attachmentList" column="form_id"
+            select="com.ruoyi.system.mapper.BcReviewAttachmentMapper.selectAttachmentsByFormId" />
+    </resultMap>
+
+    <resultMap type="BcReviewForm" id="BcReviewFormSimpleResult">
+        <id     property="formId"           column="form_id" />
+        <result property="formNo"           column="form_no" />
+        <result property="studentId"        column="student_id" />
+        <result property="studentName"      column="student_name" />
+        <result property="studentNo"        column="student_no" />
+        <result property="idCard"           column="id_card" />
+        <result property="deptId"           column="dept_id" />
+        <result property="deptName"         column="dept_name" />
+        <result property="admissionYear"    column="admission_year" />
+        <result property="formStatus"       column="form_status" />
+        <result property="submitTime"       column="submit_time" />
+        <result property="reviewerId"       column="reviewer_id" />
+        <result property="reviewerName"     column="reviewer_name" />
+        <result property="reviewTime"       column="review_time" />
+        <result property="versionNum"       column="version_num" />
+        <result property="isCurrent"         column="is_current" />
+        <result property="rejectReason"    column="reject_reason" />
+        <result property="totalAttachments" column="total_attachments" />
+        <result property="reviewedAttachments" column="reviewed_attachments" />
+        <result property="delFlag"          column="del_flag" />
+        <result property="createBy"         column="create_by" />
+        <result property="createTime"       column="create_time" />
+        <result property="updateBy"         column="update_by" />
+        <result property="updateTime"       column="update_time" />
+        <result property="remark"           column="remark" />
+    </resultMap>
+
+    <sql id="selectFormVo">
+        select form_id, form_no, student_id, student_name, student_no, id_card,
+               dept_id, dept_name, admission_year, form_status, submit_time,
+               reviewer_id, reviewer_name, review_time, version_num, is_current,
+               reject_reason, total_attachments, reviewed_attachments,
+               del_flag, create_by, create_time, update_by, update_time, remark
+        from bc_review_form
+    </sql>
+
+    <select id="selectReviewFormList" parameterType="BcReviewForm" resultMap="BcReviewFormSimpleResult">
+        <include refid="selectFormVo"/>
+        <where>
+            del_flag = '0'
+            <if test="formNo != null and formNo != ''">
+                AND form_no like concat('%', #{formNo}, '%')
+            </if>
+            <if test="studentName != null and studentName != ''">
+                AND student_name like concat('%', #{studentName}, '%')
+            </if>
+            <if test="studentNo != null and studentNo != ''">
+                AND student_no like concat('%', #{studentNo}, '%')
+            </if>
+            <if test="formStatus != null and formStatus != ''">
+                AND form_status = #{formStatus}
+            </if>
+            <if test="reviewerId != null">
+                AND reviewer_id = #{reviewerId}
+            </if>
+            <if test="deptId != null">
+                AND dept_id = #{deptId}
+            </if>
+            <if test="studentId != null">
+                AND student_id = #{studentId}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                AND submit_time &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND submit_time &lt;= #{params.endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectCurrentFormByStudentId" parameterType="Long" resultMap="BcReviewFormResult">
+        <include refid="selectFormVo"/>
+        where del_flag = '0' and is_current = '1' and student_id = #{studentId}
+        order by create_time desc limit 1
+    </select>
+
+    <select id="selectReviewFormWithAttachments" parameterType="Long" resultMap="BcReviewFormResult">
+        <include refid="selectFormVo"/>
+        where del_flag = '0' and form_id = #{formId}
+    </select>
+
+    <select id="selectReviewFormById" parameterType="Long" resultMap="BcReviewFormSimpleResult">
+        <include refid="selectFormVo"/>
+        where del_flag = '0' and form_id = #{formId}
+    </select>
+
+    <select id="selectUnassignedFormList" resultMap="BcReviewFormSimpleResult">
+        <include refid="selectFormVo"/>
+        where del_flag = '0' and form_status = '1' and (reviewer_id is null or reviewer_id = 0)
+        order by create_time asc
+    </select>
+
+    <select id="selectHistoryFormsByStudentId" parameterType="Long" resultMap="BcReviewFormSimpleResult">
+        <include refid="selectFormVo"/>
+        where del_flag = '0' and student_id = #{studentId}
+        order by version_num desc
+    </select>
+
+    <select id="selectStatusCounts" resultType="map">
+        select form_status as formStatus, count(*) as count
+        from bc_review_form
+        where del_flag = '0'
+        group by form_status
+    </select>
+
+    <select id="selectPendingCountByReviewerId" parameterType="Long" resultType="Long">
+        select count(*)
+        from bc_review_form
+        where del_flag = '0' and form_status in ('2', '1', '6')
+        and reviewer_id = #{reviewerId}
+    </select>
+
+    <select id="selectStatistics" resultType="BcStatisticsVO">
+        select
+            count(*) as totalForms,
+            sum(case when form_status = '0' then 1 else 0 end) as draftCount,
+            sum(case when form_status = '1' then 1 else 0 end) as submittedCount,
+            sum(case when form_status = '2' then 1 else 0 end) as reviewingCount,
+            sum(case when form_status = '3' then 1 else 0 end) as passedCount,
+            sum(case when form_status = '4' then 1 else 0 end) as rejectedCount,
+            sum(case when form_status = '5' then 1 else 0 end) as supplyCount,
+            sum(case when form_status = '6' then 1 else 0 end) as reReviewCount
+        from bc_review_form
+        where del_flag = '0'
+    </select>
+
+    <update id="updateAttachmentCount" parameterType="Long">
+        update bc_review_form set
+            total_attachments = (
+                select count(*) from bc_review_attachment
+                where form_id = #{formId} and del_flag = '0'
+            )
+        where form_id = #{formId}
+    </update>
+
+    <update id="updateReviewer">
+        update bc_review_form set
+            reviewer_id = #{reviewerId,jdbcType=BIGINT},
+            reviewer_name = #{reviewerName,jdbcType=VARCHAR}
+        where form_id = #{formId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateReviewForm" parameterType="BcReviewForm">
+        update bc_review_form
+        <set>
+            <if test="formStatus != null and formStatus != ''">form_status = #{formStatus},</if>
+            <if test="submitTime != null">submit_time = #{submitTime},</if>
+            <if test="reviewerId != null">reviewer_id = #{reviewerId},</if>
+            <if test="reviewerName != null">reviewer_name = #{reviewerName},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="versionNum != null">version_num = #{versionNum},</if>
+            <if test="isCurrent != null and isCurrent != ''">is_current = #{isCurrent},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="totalAttachments != null">total_attachments = #{totalAttachments},</if>
+            <if test="reviewedAttachments != null">reviewed_attachments = #{reviewedAttachments},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where form_id = #{formId}
+    </update>
+
+    <insert id="insertReviewForm" parameterType="BcReviewForm" useGeneratedKeys="true" keyProperty="formId">
+        insert into bc_review_form(
+            <if test="formId != null and formId != 0">form_id,</if>
+            <if test="formNo != null and formNo != ''">form_no,</if>
+            <if test="studentId != null">student_id,</if>
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="studentNo != null">student_no,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="admissionYear != null">admission_year,</if>
+            <if test="formStatus != null and formStatus != ''">form_status,</if>
+            <if test="versionNum != null">version_num,</if>
+            <if test="isCurrent != null and isCurrent != ''">is_current,</if>
+            <if test="rejectReason != null">reject_reason,</if>
+            <if test="totalAttachments != null">total_attachments,</if>
+            <if test="reviewedAttachments != null">reviewed_attachments,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="formId != null and formId != 0">#{formId},</if>
+            <if test="formNo != null and formNo != ''">#{formNo},</if>
+            <if test="studentId != null">#{studentId},</if>
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="studentNo != null">#{studentNo},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="admissionYear != null">#{admissionYear},</if>
+            <if test="formStatus != null and formStatus != ''">#{formStatus},</if>
+            <if test="versionNum != null">#{versionNum},</if>
+            <if test="isCurrent != null and isCurrent != ''">#{isCurrent},</if>
+            <if test="rejectReason != null">#{rejectReason},</if>
+            <if test="totalAttachments != null">#{totalAttachments},</if>
+            <if test="reviewedAttachments != null">#{reviewedAttachments},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <delete id="deleteReviewFormByIds" parameterType="Long">
+        update bc_review_form set del_flag = '2' where form_id in
+        <foreach collection="array" item="formId" open="(" separator="," close=")">
+            #{formId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BcReviewAttachmentMapper">
+
+    <resultMap type="BcReviewAttachment" id="BcReviewAttachmentResult">
+        <id     property="detailId"        column="detail_id" />
+        <result property="formId"          column="form_id" />
+        <result property="fileId"          column="file_id" />
+        <result property="fileCategory"    column="file_category" />
+        <result property="fileName"        column="file_name" />
+        <result property="filePath"         column="file_path" />
+        <result property="fileSize"        column="file_size" />
+        <result property="fileSuffix"      column="file_suffix" />
+        <result property="attachStatus"    column="attach_status" />
+        <result property="attachRemark"    column="attach_remark" />
+        <result property="reviewTime"      column="review_time" />
+        <result property="reviewerId"       column="reviewer_id" />
+        <result property="reviewerName"     column="reviewer_name" />
+        <result property="versionNum"       column="version_num" />
+        <result property="sortNum"          column="sort_num" />
+        <result property="delFlag"          column="del_flag" />
+        <result property="createBy"         column="create_by" />
+        <result property="createTime"       column="create_time" />
+        <result property="updateBy"         column="update_by" />
+        <result property="updateTime"       column="update_time" />
+    </resultMap>
+
+    <sql id="selectAttachmentVo">
+        select detail_id, form_id, file_id, file_category, file_name, file_path,
+               file_size, file_suffix, attach_status, attach_remark, review_time,
+               reviewer_id, reviewer_name, version_num, sort_num,
+               del_flag, create_by, create_time, update_by, update_time
+        from bc_review_attachment
+    </sql>
+
+    <select id="selectAttachmentList" parameterType="BcReviewAttachment" resultMap="BcReviewAttachmentResult">
+        <include refid="selectAttachmentVo"/>
+        <where>
+            del_flag = '0'
+            <if test="formId != null">AND form_id = #{formId}</if>
+            <if test="fileCategory != null and fileCategory != ''">AND file_category = #{fileCategory}</if>
+            <if test="attachStatus != null and attachStatus != ''">AND attach_status = #{attachStatus}</if>
+        </where>
+        order by file_category, sort_num
+    </select>
+
+    <select id="selectAttachmentsByFormId" parameterType="Long" resultMap="BcReviewAttachmentResult">
+        <include refid="selectAttachmentVo"/>
+        where del_flag = '0' and form_id = #{formId}
+        order by file_category, sort_num
+    </select>
+
+    <select id="selectAttachmentById" parameterType="Long" resultMap="BcReviewAttachmentResult">
+        <include refid="selectAttachmentVo"/>
+        where del_flag = '0' and detail_id = #{detailId}
+    </select>
+
+    <select id="countByFormIdAndCategory" resultType="int">
+        select count(*) from bc_review_attachment
+        where del_flag = '0' and form_id = #{formId} and file_category = #{fileCategory}
+    </select>
+
+    <insert id="insertAttachment" parameterType="BcReviewAttachment" useGeneratedKeys="true" keyProperty="detailId">
+        insert into bc_review_attachment(
+            <if test="formId != null">form_id,</if>
+            <if test="fileId != null">file_id,</if>
+            <if test="fileCategory != null and fileCategory != ''">file_category,</if>
+            <if test="fileName != null and fileName != ''">file_name,</if>
+            <if test="filePath != null and filePath != ''">file_path,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="fileSuffix != null">file_suffix,</if>
+            <if test="attachStatus != null and attachStatus != ''">attach_status,</if>
+            <if test="versionNum != null">version_num,</if>
+            <if test="sortNum != null">sort_num,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="formId != null">#{formId},</if>
+            <if test="fileId != null">#{fileId},</if>
+            <if test="fileCategory != null and fileCategory != ''">#{fileCategory},</if>
+            <if test="fileName != null and fileName != ''">#{fileName},</if>
+            <if test="filePath != null and filePath != ''">#{filePath},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="fileSuffix != null">#{fileSuffix},</if>
+            <if test="attachStatus != null and attachStatus != ''">#{attachStatus},</if>
+            <if test="versionNum != null">#{versionNum},</if>
+            <if test="sortNum != null">#{sortNum},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <insert id="insertAttachments">
+        insert into bc_review_attachment(form_id, file_id, file_category, file_name, file_path,
+            file_size, file_suffix, attach_status, version_num, sort_num, create_by, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.formId}, #{item.fileId}, #{item.fileCategory}, #{item.fileName}, #{item.filePath},
+             #{item.fileSize}, #{item.fileSuffix}, #{item.attachStatus}, #{item.versionNum},
+             #{item.sortNum}, #{item.createBy}, sysdate())
+        </foreach>
+    </insert>
+
+    <update id="updateAttachment" parameterType="BcReviewAttachment">
+        update bc_review_attachment
+        <set>
+            <if test="attachStatus != null and attachStatus != ''">attach_status = #{attachStatus},</if>
+            <if test="attachRemark != null">attach_remark = #{attachRemark},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="reviewerId != null">reviewer_id = #{reviewerId},</if>
+            <if test="reviewerName != null">reviewer_name = #{reviewerName},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where detail_id = #{detailId}
+    </update>
+
+    <update id="updateAttachmentsStatus">
+        update bc_review_attachment set
+            attach_status = #{status},
+            reviewer_id = #{reviewerId},
+            reviewer_name = #{reviewerName},
+            attach_remark = #{remark},
+            review_time = sysdate()
+        where del_flag = '0' and detail_id in
+        <foreach collection="detailIds" item="detailId" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </update>
+
+    <delete id="deleteAttachmentByIds" parameterType="Long">
+        update bc_review_attachment set del_flag = '2' where detail_id in
+        <foreach collection="array" item="detailId" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAttachmentsByFormId" parameterType="Long">
+        update bc_review_attachment set del_flag = '2' where form_id = #{formId}
+    </delete>
+
+    <delete id="physicallyDeleteAttachmentsByFormId" parameterType="Long">
+        delete from bc_review_attachment where form_id = #{formId}
+    </delete>
+
+</mapper>

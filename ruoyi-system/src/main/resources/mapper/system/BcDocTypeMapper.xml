@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BcDocTypeMapper">
+
+    <resultMap type="BcDocType" id="BcDocTypeResult">
+        <id     property="typeId"         column="type_id" />
+        <result property="typeCode"       column="type_code" />
+        <result property="typeName"       column="type_name" />
+        <result property="typeDesc"       column="type_desc" />
+        <result property="isRequired"     column="is_required" />
+        <result property="allowMultiple"  column="allow_multiple" />
+        <result property="maxFileCount"   column="max_file_count" />
+        <result property="allowedSuffix"  column="allowed_suffix" />
+        <result property="maxFileSize"    column="max_file_size" />
+        <result property="sortNum"         column="sort_num" />
+        <result property="status"          column="status" />
+        <result property="createBy"        column="create_by" />
+        <result property="createTime"      column="create_time" />
+        <result property="updateBy"        column="update_by" />
+        <result property="updateTime"      column="update_time" />
+        <result property="remark"          column="remark" />
+    </resultMap>
+
+    <sql id="selectDocTypeVo">
+        select type_id, type_code, type_name, type_desc, is_required, allow_multiple,
+               max_file_count, allowed_suffix, max_file_size, sort_num, status,
+               create_by, create_time, update_by, update_time, remark
+        from bc_doc_type
+    </sql>
+
+    <select id="selectDocTypeList" parameterType="BcDocType" resultMap="BcDocTypeResult">
+        <include refid="selectDocTypeVo"/>
+        <where>
+            <if test="typeCode != null and typeCode != ''">
+                AND type_code like concat('%', #{typeCode}, '%')
+            </if>
+            <if test="typeName != null and typeName != ''">
+                AND type_name like concat('%', #{typeName}, '%')
+            </if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+        order by sort_num
+    </select>
+
+    <select id="selectDocTypeAll" resultMap="BcDocTypeResult">
+        <include refid="selectDocTypeVo"/>
+        where status = '0'
+        order by sort_num
+    </select>
+
+    <select id="selectDocTypeById" parameterType="Long" resultMap="BcDocTypeResult">
+        <include refid="selectDocTypeVo"/>
+        where type_id = #{typeId}
+    </select>
+
+    <select id="selectDocTypeByCode" parameterType="String" resultMap="BcDocTypeResult">
+        <include refid="selectDocTypeVo"/>
+        where type_code = #{typeCode} limit 1
+    </select>
+
+    <select id="checkTypeCodeUnique" parameterType="String" resultMap="BcDocTypeResult">
+        <include refid="selectDocTypeVo"/>
+        where type_code = #{typeCode} limit 1
+    </select>
+
+    <insert id="insertDocType" parameterType="BcDocType" useGeneratedKeys="true" keyProperty="typeId">
+        insert into bc_doc_type(
+            <if test="typeId != null and typeId != 0">type_id,</if>
+            <if test="typeCode != null and typeCode != ''">type_code,</if>
+            <if test="typeName != null and typeName != ''">type_name,</if>
+            <if test="typeDesc != null">type_desc,</if>
+            <if test="isRequired != null and isRequired != ''">is_required,</if>
+            <if test="allowMultiple != null and allowMultiple != ''">allow_multiple,</if>
+            <if test="maxFileCount != null">max_file_count,</if>
+            <if test="allowedSuffix != null">allowed_suffix,</if>
+            <if test="maxFileSize != null">max_file_size,</if>
+            <if test="sortNum != null">sort_num,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="typeId != null and typeId != 0">#{typeId},</if>
+            <if test="typeCode != null and typeCode != ''">#{typeCode},</if>
+            <if test="typeName != null and typeName != ''">#{typeName},</if>
+            <if test="typeDesc != null">#{typeDesc},</if>
+            <if test="isRequired != null and isRequired != ''">#{isRequired},</if>
+            <if test="allowMultiple != null and allowMultiple != ''">#{allowMultiple},</if>
+            <if test="maxFileCount != null">#{maxFileCount},</if>
+            <if test="allowedSuffix != null">#{allowedSuffix},</if>
+            <if test="maxFileSize != null">#{maxFileSize},</if>
+            <if test="sortNum != null">#{sortNum},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateDocType" parameterType="BcDocType">
+        update bc_doc_type
+        <set>
+            <if test="typeCode != null and typeCode != ''">type_code = #{typeCode},</if>
+            <if test="typeName != null and typeName != ''">type_name = #{typeName},</if>
+            <if test="typeDesc != null">type_desc = #{typeDesc},</if>
+            <if test="isRequired != null and isRequired != ''">is_required = #{isRequired},</if>
+            <if test="allowMultiple != null and allowMultiple != ''">allow_multiple = #{allowMultiple},</if>
+            <if test="maxFileCount != null">max_file_count = #{maxFileCount},</if>
+            <if test="allowedSuffix != null">allowed_suffix = #{allowedSuffix},</if>
+            <if test="maxFileSize != null">max_file_size = #{maxFileSize},</if>
+            <if test="sortNum != null">sort_num = #{sortNum},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where type_id = #{typeId}
+    </update>
+
+    <delete id="deleteDocTypeByIds" parameterType="Long">
+        delete from bc_doc_type where type_id in
+        <foreach collection="array" item="typeId" open="(" separator="," close=")">
+            #{typeId}
+        </foreach>
+    </delete>
+
+</mapper>

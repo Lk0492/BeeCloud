@@ -144,4 +144,12 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 根据用户类型查询用户列表
+     *
+     * @param userType 用户类型（02审核员）
+     * @return 用户列表
+     */
+    public List<SysUser> selectUserListByUserType(String userType);
 }

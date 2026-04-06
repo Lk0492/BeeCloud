@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BcReviewRecordMapper">
+
+    <resultMap type="BcReviewRecord" id="BcReviewRecordResult">
+        <id     property="recordId"          column="record_id" />
+        <result property="formId"            column="form_id" />
+        <result property="detailId"          column="detail_id" />
+        <result property="studentId"         column="student_id" />
+        <result property="studentName"       column="student_name" />
+        <result property="reviewerId"        column="reviewer_id" />
+        <result property="reviewerName"      column="reviewer_name" />
+        <result property="actionType"        column="action_type" />
+        <result property="actionRemark"      column="action_remark" />
+        <result property="formStatusBefore"  column="form_status_before" />
+        <result property="formStatusAfter"   column="form_status_after" />
+        <result property="versionNum"         column="version_num" />
+        <result property="createBy"           column="create_by" />
+        <result property="createTime"        column="create_time" />
+    </resultMap>
+
+    <sql id="selectRecordVo">
+        select record_id, form_id, detail_id, student_id, student_name,
+               reviewer_id, reviewer_name, action_type, action_remark,
+               form_status_before, form_status_after, version_num,
+               create_by, create_time
+        from bc_review_record
+    </sql>
+
+    <select id="selectRecordList" parameterType="BcReviewRecord" resultMap="BcReviewRecordResult">
+        <include refid="selectRecordVo"/>
+        <where>
+            <if test="formId != null">AND form_id = #{formId}</if>
+            <if test="studentName != null and studentName != ''">
+                AND student_name like concat('%', #{studentName}, '%')
+            </if>
+            <if test="reviewerId != null">AND reviewer_id = #{reviewerId}</if>
+            <if test="actionType != null and actionType != ''">AND action_type = #{actionType}</if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                AND create_time &gt;= #{params.beginTime}
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND create_time &lt;= #{params.endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectRecordsByFormId" parameterType="Long" resultMap="BcReviewRecordResult">
+        <include refid="selectRecordVo"/>
+        where form_id = #{formId}
+        order by create_time desc
+    </select>
+
+    <select id="selectRecordById" parameterType="Long" resultMap="BcReviewRecordResult">
+        <include refid="selectRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <select id="countByReviewerId" parameterType="Long" resultType="Long">
+        select count(*) from bc_review_record where reviewer_id = #{reviewerId}
+    </select>
+
+    <insert id="insertRecord" parameterType="BcReviewRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into bc_review_record(
+            form_id, detail_id, student_id, student_name,
+            reviewer_id, reviewer_name, action_type, action_remark,
+            form_status_before, form_status_after, version_num, create_by, create_time
+        )values(
+            #{formId}, #{detailId}, #{studentId}, #{studentName},
+            #{reviewerId}, #{reviewerName}, #{actionType}, #{actionRemark},
+            #{formStatusBefore}, #{formStatusAfter}, #{versionNum}, #{createBy}, sysdate()
+        )
+    </insert>
+
+    <delete id="deleteRecordByIds" parameterType="Long">
+        delete from bc_review_record where record_id in
+        <foreach collection="array" item="recordId" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+
+</mapper>
