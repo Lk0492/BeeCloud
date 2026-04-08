@@ -152,49 +152,116 @@
       }
     }
     
-    // theme-light 浅色主题
+    // theme-light 浅色主题 — Apple 简洁风格
     &.theme-light {
-      border-right: 1px solid #e8eaf0;
-      box-shadow: none;
+      background: #f5f5f7;
+      border-right: 1px solid #d2d2d7;
+      box-shadow: 1px 0 12px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+
+      .el-scrollbar__view {
+        padding: 4px 0;
+      }
+
+      .el-menu {
+        background: transparent;
+        border: none;
+      }
 
       .el-menu-item,
       .el-submenu__title {
-        color: rgba(0, 0, 0, 0.65);
+        color: rgba(60, 60, 67, 0.80);
+        border-radius: 8px;
+        margin: 2px 8px;
+        padding: 0 12px !important;
+        height: 38px !important;
+        line-height: 38px !important;
+        transition: background 0.2s ease, color 0.2s ease;
       }
 
       .el-menu-item.is-active {
-        color: var(--current-color, #409eff) !important;
+        color: #0071e3 !important;
+        background: rgba(0, 113, 227, 0.08);
+        font-weight: 500;
         position: relative;
+        border-radius: 8px;
 
         &::before {
           content: '';
           position: absolute;
           inset: 0;
-          background-color: var(--current-color-light, #ecf5ff);
-          border-right: 3px solid var(--current-color, #409eff);
+          border-radius: 8px;
+          background-color: rgba(0, 113, 227, 0.08);
           pointer-events: none;
-          z-index: 1;
+          z-index: 0;
+        }
+
+        .svg-icon {
+          color: #0071e3;
+        }
+
+        .menu-title {
+          color: #0071e3;
+          font-weight: 500;
         }
       }
 
       .el-submenu.is-active > .el-submenu__title {
-        color: var(--current-color, #409eff) !important;
+        color: #0071e3 !important;
       }
 
       .el-menu-item:not(.is-active):hover,
       .submenu-title-noDropdown:hover,
       .el-submenu__title:hover {
-        background-color: #f5f7fa !important;
-        color: rgba(0, 0, 0, 0.85) !important;
+        background-color: rgba(0, 0, 0, 0.04) !important;
+        color: rgba(60, 60, 67, 0.95) !important;
+        border-radius: 8px;
       }
 
       .nest-menu .el-submenu > .el-submenu__title,
       .el-submenu .el-menu-item {
-        background-color: #fafafa !important;
+        background-color: transparent !important;
+        border-radius: 8px;
+        margin: 2px 8px;
+        height: 36px !important;
+        line-height: 36px !important;
+        padding: 0 12px !important;
 
         &:hover {
-          background-color: #f0f5ff !important;
+          background-color: rgba(0, 0, 0, 0.04) !important;
+          border-radius: 8px;
         }
+      }
+
+      .el-submenu .el-submenu__title {
+        border-radius: 8px;
+        margin: 2px 8px;
+        height: 38px !important;
+        line-height: 38px !important;
+        padding: 0 12px !important;
+      }
+
+      .svg-icon {
+        font-size: 16px;
+        color: rgba(60, 60, 67, 0.55);
+        transition: color 0.2s ease;
+      }
+
+      .el-menu-item:hover .svg-icon,
+      .el-submenu__title:hover .svg-icon {
+        color: rgba(60, 60, 67, 0.85);
+      }
+
+      .el-menu-item.is-active .svg-icon {
+        color: #0071e3;
+      }
+
+      .el-submenu__icon-arrow {
+        color: rgba(60, 60, 67, 0.40);
+      }
+
+      .el-submenu.is-active .el-submenu__icon-arrow {
+        color: #0071e3;
       }
     }
   }
@@ -285,7 +352,7 @@
 }
 
 // when menu collapsed
-.el-menu--vertical {
+  .el-menu--vertical {
   &>.el-menu {
     .svg-icon {
       margin-right: 16px;
@@ -295,18 +362,54 @@
   .nest-menu .el-submenu>.el-submenu__title,
   .el-menu-item {
     &:hover {
-      // you can use $subMenuHover
-      background-color: rgba(0, 0, 0, 0.06) !important;
+      background-color: rgba(0, 0, 0, 0.04) !important;
+      border-radius: 8px;
     }
   }
 
-  // the scroll bar appears when the subMenu is too long
   >.el-menu--popup {
     max-height: 100vh;
     overflow-y: auto;
+    background: #f5f5f7;
+    border: 1px solid #d2d2d7;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    padding: 6px;
+    min-width: 160px;
+
+    .el-menu-item {
+      height: 36px;
+      line-height: 36px;
+      border-radius: 6px;
+      margin: 2px 0;
+      color: rgba(60, 60, 67, 0.80);
+
+      &.is-active {
+        color: #0071e3 !important;
+        background: rgba(0, 113, 227, 0.08);
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04) !important;
+        border-radius: 6px;
+      }
+    }
+
+    .el-submenu__title {
+      border-radius: 6px;
+      margin: 2px 0;
+      height: 36px;
+      line-height: 36px;
+      color: rgba(60, 60, 67, 0.80);
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04) !important;
+        border-radius: 6px;
+      }
+    }
 
     &::-webkit-scrollbar-track-piece {
-      background: #d3dce6;
+      background: #f5f5f7;
     }
 
     &::-webkit-scrollbar {
@@ -314,8 +417,14 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #99a9bf;
+      background: #d2d2d7;
       border-radius: 20px;
     }
   }
+}
+
+// 菜单标题通用样式
+.menu-title {
+  font-size: 13.5px;
+  letter-spacing: 0.01em;
 }

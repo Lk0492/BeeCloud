@@ -14,12 +14,13 @@ $base-menu-color-active: #ffffff;
 $base-menu-background: #1a1f2e;
 $base-logo-title-color: #ffffff;
 
-$base-menu-light-color:rgba(0,0,0,.70);
-$base-menu-light-background:#ffffff;
-$base-logo-light-title-color: #001529;
+$base-menu-light-color: rgba(60, 60, 67, 0.80);
+$base-menu-light-background: #f5f5f7;
+$base-logo-light-title-color: #1d1d1f;
 
-$base-sub-menu-background: #141824;
-$base-sub-menu-hover: rgba(255,255,255,.06);
+// Apple 风格精选色系
+$base-sub-menu-background: #e8e8ed;
+$base-sub-menu-hover: rgba(0, 0, 0, 0.04);
 
 $base-sidebar-width: 200px;
 
