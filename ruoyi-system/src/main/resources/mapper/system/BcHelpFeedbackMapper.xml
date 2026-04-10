@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BcHelpFeedbackMapper">
+
+    <resultMap type="BcHelpFeedback" id="BcHelpFeedbackResult">
+        <id     property="feedbackId"      column="feedback_id" />
+        <result property="userId"          column="user_id" />
+        <result property="userName"        column="user_name" />
+        <result property="question"         column="question" />
+        <result property="answer"           column="answer" />
+        <result property="replyBy"          column="reply_by" />
+        <result property="replyTime"        column="reply_time" />
+        <result property="replyStatus"      column="reply_status" />
+        <result property="searchKeywords"   column="search_keywords" />
+        <result property="createBy"        column="create_by" />
+        <result property="createTime"       column="create_time" />
+        <result property="updateBy"        column="update_by" />
+        <result property="updateTime"      column="update_time" />
+        <result property="remark"          column="remark" />
+    </resultMap>
+
+    <sql id="selectFeedbackVo">
+        select feedback_id, user_id, user_name, question, answer,
+               reply_by, reply_time, reply_status, search_keywords,
+               create_by, create_time, update_by, update_time, remark
+        from bc_help_feedback
+    </sql>
+
+    <select id="selectHelpFeedbackList" parameterType="BcHelpFeedback" resultMap="BcHelpFeedbackResult">
+        <include refid="selectFeedbackVo"/>
+        <where>
+            <if test="userName != null and userName != ''">
+                AND user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="question != null and question != ''">
+                AND question like concat('%', #{question}, '%')
+            </if>
+            <if test="replyStatus != null and replyStatus != ''">AND reply_status = #{replyStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectHelpFeedbackById" parameterType="Long" resultMap="BcHelpFeedbackResult">
+        <include refid="selectFeedbackVo"/>
+        where feedback_id = #{feedbackId}
+    </select>
+
+    <insert id="insertHelpFeedback" parameterType="BcHelpFeedback" useGeneratedKeys="true" keyProperty="feedbackId">
+        insert into bc_help_feedback(
+            <if test="feedbackId != null and feedbackId != 0">feedback_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="question != null and question != ''">question,</if>
+            <if test="searchKeywords != null">search_keywords,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            create_time
+        )values(
+            <if test="feedbackId != null and feedbackId != 0">#{feedbackId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="question != null and question != ''">#{question},</if>
+            <if test="searchKeywords != null">#{searchKeywords},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            sysdate()
+        )
+    </insert>
+
+    <update id="updateHelpFeedback" parameterType="BcHelpFeedback">
+        update bc_help_feedback
+        <set>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="replyBy != null and replyBy != ''">reply_by = #{replyBy},</if>
+            <if test="replyTime != null">reply_time = #{replyTime},</if>
+            <if test="replyStatus != null and replyStatus != ''">reply_status = #{replyStatus},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where feedback_id = #{feedbackId}
+    </update>
+
+    <delete id="deleteHelpFeedbackByIds" parameterType="Long">
+        delete from bc_help_feedback where feedback_id in
+        <foreach collection="array" item="feedbackId" open="(" separator="," close=")">
+            #{feedbackId}
+        </foreach>
+    </delete>
+
+    <select id="countPendingFeedback" resultType="int">
+        select count(1) from bc_help_feedback where reply_status = '0'
+    </select>
+
+</mapper>
