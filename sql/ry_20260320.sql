@@ -24,16 +24,39 @@ create table sys_dept (
 -- ----------------------------
 -- 初始化-校区/学院/专业表数据
 -- ----------------------------
-insert into sys_dept values(100,  0,   '0',          'XX大学',              'campus',  0, '管理员', '15888888888', 'admin@xxu.edu.cn',   '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(101,  100, '0,100',      '主校区',               'campus',  1, '王主任', '15888888889', 'campus1@xxu.edu.cn', '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(102,  100, '0,100',      '东校区',               'campus',  2, '李主任', '15888888880', 'campus2@xxu.edu.cn', '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(200,  101, '0,100,101',  '计算机学院',           'college', 1, '张院长', '13800000001', 'cs@xxu.edu.cn',      '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(201,  101, '0,100,101',  '软件学院',             'college', 2, '刘院长', '13800000002', 'sw@xxu.edu.cn',      '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(202,  102, '0,100,102',  '信息学院',             'college', 1, '陈院长', '13800000003', 'info@xxu.edu.cn',     '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(300,  200, '0,100,101,200','计算机科学与技术',   'major',   1, '王老师', '13800000011', 'cs1@xxu.edu.cn',     '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(301,  200, '0,100,101,200','软件工程',           'major',   2, '李老师', '13800000012', 'cs2@xxu.edu.cn',     '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(302,  201, '0,100,101,201','数据科学与大数据技术','major',   1, '赵老师', '13800000013', 'sw1@xxu.edu.cn',     '0', '0', 'admin', sysdate(), '', null);
-insert into sys_dept values(303,  202, '0,100,102,202','电子信息工程',       'major',   1, '周老师', '13800000014', 'info1@xxu.edu.cn',   '0', '0', 'admin', sysdate(), '', null);
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (100, 0, '0', '南珠大学', 'campus', 0, '管理员', '15888888888', 'admin@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:15', 'admin', '2026-04-03 01:26:43');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (101, 100, '0,100', '西校区', 'campus', 1, '王主任', '15888888889', 'campus1@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:15', 'admin', '2026-04-03 01:27:11');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (102, 100, '0,100', '东校区', 'campus', 2, '李主任', '15888888880', 'campus2@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:15', '', null);
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (200, 102, '0,100,102', '计算机工程学院', 'college', 1, '张院长', '13800000001', 'gdbhjsjgcxy@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:15', 'admin', '2026-04-04 02:23:38');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (201, 101, '0,100,101', '经济与管理学院', 'college', 2, '刘院长', '13800000002', 'jjyglsw@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:15', 'admin', '2026-04-04 02:25:14');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (202, 102, '0,100,102', '电子信息学院', 'college', 1, '陈院长', '13800000003', 'dzxxinfo@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:16', 'admin', '2026-04-04 02:24:17');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (300, 200, '0,100,102,200', '计算机科学与技术', 'major', 1, '王老师', '13800000011', 'cs1@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:16', '', null);
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (301, 200, '0,100,102,200', '网络工程', 'major', 2, '李老师', '13800000012', 'cs2@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:16', 'admin', '2026-04-04 02:24:38');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (302, 201, '0,100,101,201', '物流管理', 'major', 1, '赵老师', '13800000013', 'sw1@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:16', 'admin', '2026-04-04 02:25:59');
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (303, 202, '0,100,102,202', '电子信息工程', 'major', 1, '周老师', '13800000014', 'info1@xxu.edu.cn', '0', '0', 'admin', '2026-04-03 01:05:16', '', null);
+INSERT INTO `ry-vue`.sys_dept
+    (dept_id, parent_id, ancestors, dept_name, dept_type, order_num, leader, phone, email, status, del_flag, create_by, create_time, update_by, update_time)
+ VALUES (304, 100, '0,100', '招生办', 'campus', 3, '李老师', '18888888888', '238473432734@qq.com', '0', '0', 'admin', '2026-04-04 02:26:56', '', null);
 
 
 -- ----------------------------
@@ -189,7 +212,6 @@ create table sys_menu (
 insert into sys_menu values('1', '系统管理', '0', '1', 'system',           null, '', '', 1, 0, 'M', '0', '0', '', 'system',   'admin', sysdate(), '', null, '系统管理目录');
 insert into sys_menu values('2', '系统监控', '0', '2', 'monitor',          null, '', '', 1, 0, 'M', '0', '0', '', 'monitor',  'admin', sysdate(), '', null, '系统监控目录');
 insert into sys_menu values('3', '系统工具', '0', '3', 'tool',             null, '', '', 1, 0, 'M', '0', '0', '', 'tool',     'admin', sysdate(), '', null, '系统工具目录');
-insert into sys_menu values('4', '若依官网', '0', '4', 'http://ruoyi.vip', null, '', '', 0, 0, 'M', '0', '0', '', 'guide',    'admin', sysdate(), '', null, '若依官网地址');
 -- 二级菜单
 insert into sys_menu values('100',  '用户管理', '1',   '1', 'user',       'system/user/index',        '', '', 1, 0, 'C', '0', '0', 'system:user:list',        'user',          'admin', sysdate(), '', null, '用户管理菜单');
 insert into sys_menu values('101',  '角色管理', '1',   '2', 'role',       'system/role/index',        '', '', 1, 0, 'C', '0', '0', 'system:role:list',        'peoples',       'admin', sysdate(), '', null, '角色管理菜单');
@@ -769,3 +791,64 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+
+
+-- ----------------------------
+-- 21、MinIO附件表
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_attachment`;
+CREATE TABLE `sys_attachment` (
+  `file_id`            bigint        NOT NULL                AUTO_INCREMENT  COMMENT '附件ID',
+  `original_filename`  varchar(255)  DEFAULT NULL          COMMENT '原始文件名（上传时的名称）',
+  `filename`          varchar(255)  DEFAULT NULL          COMMENT '服务器端文件名',
+  `file_suffix`        varchar(32)   DEFAULT NULL          COMMENT '文件后缀',
+  `file_size`          bigint        DEFAULT NULL          COMMENT '文件大小（字节）',
+  `file_type`          varchar(32)   DEFAULT NULL          COMMENT '文件类型（image/video/audio/document/archive/other）',
+  `content_type`       varchar(128)  DEFAULT NULL          COMMENT 'MIME类型',
+  `access_url`         varchar(512)  DEFAULT NULL          COMMENT '访问地址（完整URL）',
+  `storage_type`       varchar(16)   DEFAULT NULL          COMMENT '存储方式（minio/local）',
+  `bucket_name`        varchar(128)  DEFAULT NULL          COMMENT '存储桶名称（MinIO）',
+  `object_name`        varchar(512)  DEFAULT NULL          COMMENT '对象名称（MinIO object key）',
+  `uuid`               varchar(64)   DEFAULT NULL          COMMENT '文件唯一标识（UUID）',
+  `business_type`      varchar(64)   DEFAULT NULL          COMMENT '业务类型（如：avatar/notice/article）',
+  `business_id`        bigint        DEFAULT NULL          COMMENT '关联业务ID',
+  `dept_id`            bigint        DEFAULT NULL          COMMENT '上传者部门ID',
+  `dept_name`          varchar(64)   DEFAULT NULL          COMMENT '上传者部门名称',
+  `uploader_username`  varchar(64)   DEFAULT NULL          COMMENT '上传者用户名',
+  `download_count`     bigint        DEFAULT 0             COMMENT '下载次数',
+  `status`             char(1)       DEFAULT '0'           COMMENT '文件状态（0=正常 1=禁用）',
+  `del_flag`           char(1)       DEFAULT '0'           COMMENT '删除标志（0=存在 2=删除）',
+  `create_by`          varchar(64)   DEFAULT NULL          COMMENT '创建者',
+  `create_time`        datetime      DEFAULT NULL          COMMENT '创建时间',
+  `update_by`          varchar(64)   DEFAULT NULL          COMMENT '更新者',
+  `update_time`        datetime      DEFAULT NULL          COMMENT '更新时间',
+  `remark`             varchar(512)  DEFAULT NULL          COMMENT '备注',
+  PRIMARY KEY (`file_id`),
+  KEY `idx_attachment_uuid`           (`uuid`),
+  KEY `idx_attachment_business`       (`business_type`, `business_id`),
+  KEY `idx_attachment_uploader`       (`uploader_username`),
+  KEY `idx_attachment_create_time`    (`create_time`),
+  KEY `idx_attachment_del_flag`       (`del_flag`),
+  KEY `idx_attachment_file_type`      (`file_type`),
+  KEY `idx_attachment_storage_type`    (`storage_type`),
+  KEY `idx_attachment_dept_id`        (`dept_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='附件管理表';
+
+-- ----------------------------
+-- 2. 初始数据（文件类型字典，配合前端下拉筛选使用）
+-- ----------------------------
+-- 注意：若系统已有字典模块，请在"字典类型"中新增 `sys_file_type` 类型，
+-- 并在"字典数据"中添加以下数据：
+--
+--  INSERT INTO `sys_dict_data` (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark) VALUES
+--  (1, '图片',     'image',    'sys_file_type', '', 'primary',   'Y', '0', 'admin', sysdate(), ''),
+--  (2, '视频',     'video',    'sys_file_type', '', 'danger',    'N', '0', 'admin', sysdate(), ''),
+--  (3, '音频',     'audio',    'sys_file_type', '', 'warning',   'N', '0', 'admin', sysdate(), ''),
+--  (4, '文档',     'document', 'sys_file_type', '', 'success',   'N', '0', 'admin', sysdate(), ''),
+--  (5, '压缩包',   'archive',  'sys_file_type', '', 'info',      'N', '0', 'admin', sysdate(), ''),
+--  (6, '其他',     'other',    'sys_file_type', '', 'default',   'N', '0', 'admin', sysdate(), '');
+--
+-- 存储方式字典（dict_type: sys_storage_type）：
+--  INSERT INTO `sys_dict_data` (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark) VALUES
+--  (1, 'MinIO对象存储', 'minio', 'sys_storage_type', '', 'primary',   'Y', '0', 'admin', sysdate(), ''),
+--  (2, '本地磁盘',     'local', 'sys_storage_type', '', 'default',   'N', '0', 'admin', sysdate(), '');
