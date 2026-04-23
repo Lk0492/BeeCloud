@@ -69,6 +69,7 @@ create table bc_help_feedback (
   reply_time       datetime        default null               comment '回复时间',
   reply_status     char(1)         default '0'                comment '回复状态（0待回复 1已回复 2已关闭）',
   search_keywords  varchar(500)   default null               comment '用户搜索时输入的关键词',
+  create_by        varchar(64)     default ''                 comment '创建者',
   create_time      datetime                                 comment '提交时间',
   update_by        varchar(64)     default ''                 comment '更新者',
   update_time      datetime                                 comment '更新时间',
